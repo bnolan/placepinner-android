@@ -1,56 +1,56 @@
 package com.placepinner.android;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.util.Log;
+import android.app.ProgressDialog;
+import android.widget.AdapterView;
+import android.view.View;
+import android.widget.Toast;
 
-//import java.io.BufferedInputStream;
-//import java.io.File;
-//import java.io.FileOutputStream;
-//import java.io.IOException;
-import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
-import java.net.URLConnection;
- 
+import com.placepinner.android.RetrievePlaces;
+
 public class MainActivity extends Activity {
-
+	public ProgressDialog progressDialog;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        ListView listView = (ListView) findViewById(R.id.listView1);
-        String[] values = new String[] { "Australia", "Austria", "Germany", "New Zealand", "United States", "Australia", "Austria", "Germany", "New Zealand", "United States", "Australia", "Austria", "Germany", "New Zealand", "United States", "Australia", "Austria", "Germany", "New Zealand", "United States" };
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading places...");
+        progressDialog.show();
         
-        InputStream response = this.getStream("http://placepinner.com/");
-        Log.i ("info", "hello!" );
+        new RetrievePlaces(this).execute("http://placepinner.com/places.json");
         
-        String str = "blah";
+        final ListView list = (ListView) findViewById(R.id.listView1);
+        list.setClickable(true);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        	
+        	@Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        		
+            	Log.i ("info", "Detected list click");
 
-        try{
-	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	        byte[] buffer = new byte[1024];
-	        int length = 0;
-	        while ((length = response.read(buffer)) != -1) {
-	            baos.write(buffer, 0, length);
-	        }
-	        str = new String(baos.toByteArray());
-    	} catch (Exception ex) {
-    		Log.i ("Exception!", ex.toString() );
-    	}
-        
-        
-        Log.i ("info", str);
+            	Object o = list.getItemAtPosition(position);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
-        listView.setAdapter(adapter); 
+            	// As you are using Default String Adapter
+            	String str = (String) o;
+            	
+            	Toast.makeText(getBaseContext(), "Clicked " + str, Toast.LENGTH_SHORT).show();
+        	}
+        });
     }
 
+    public void populateCountriesList(String[] values){
+        ListView list= (ListView) findViewById(R.id.listView1);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        list.setAdapter(adapter); 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,17 +59,5 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    private InputStream getStream(String inputUrl) {
-        try {
-            URL url = new URL(inputUrl);
-            URLConnection urlConnection = url.openConnection();
-            urlConnection.setConnectTimeout(5000);
-            return urlConnection.getInputStream();
-        } catch (Exception ex) {
-            Log.i ("Exception!", ex.toString() );
-            Log.i ("info", ex.toString() );
-            return null;
-        }
-    }
     
 }
