@@ -14,6 +14,7 @@ import java.util.Collections;
 
 import com.placepinner.android.MainActivity;
 import com.placepinner.android.Place;
+import com.placepinner.android.MyApp;
 
 public class RetrievePlaces extends AsyncTask<String, Void, String> {
     private Exception exception;
@@ -92,6 +93,10 @@ public class RetrievePlaces extends AsyncTask<String, Void, String> {
 
         activity.progressDialog.dismiss();
 
+        // Populate the places list
+        MyApp app = (MyApp)activity.getApplicationContext();
+        app.resetPlaces(places);
+        
         activity.populatePlaces(
         	places.toArray(new Place[places.size()])
         );

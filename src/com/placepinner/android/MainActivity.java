@@ -40,17 +40,19 @@ public class MainActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         		String placeId = "1234-4567";
         		
-            	Log.i ("info", "Detected list click");
-
             	Object o = list.getItemAtPosition(position);
 
             	// As you are using Default String Adapter
-            	String str = (String) o;
+            	// String str = (String) o;
             	
-            	Toast.makeText(getBaseContext(), "Clicked " + str, Toast.LENGTH_SHORT).show();
+            	Place place = (Place) o;
             	
+            	// Toast.makeText(getBaseContext(), "Clicked " + place.getName(), Toast.LENGTH_SHORT).show();
+            	
+            	Log.i ("info", "Clicked id: " + place.getId());
+
             	Intent i = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-            	i.putExtra("id", placeId);
+            	i.putExtra("id", place.getId());
             	startActivity(i);            	
         	}
         });
