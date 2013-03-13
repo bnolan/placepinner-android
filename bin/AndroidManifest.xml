@@ -17,6 +17,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <activity android:name="com.placepinner.android.PlaceDetailActivity"></activity>
         <activity
             android:name="com.placepinner.android.MainActivity"
             android:label="@string/app_name" >

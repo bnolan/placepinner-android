@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.placepinner.android.MainActivity;
+import com.placepinner.android.Place;
 
 public class RetrievePlaces extends AsyncTask<String, Void, String> {
     private Exception exception;
@@ -74,28 +75,30 @@ public class RetrievePlaces extends AsyncTask<String, Void, String> {
     	Log.i ("info", "HTTP Fetch complete");
         // Log.i ("info", output);
 
-    	ArrayList<String> countries = new ArrayList<String>();
+    	ArrayList<Place> places = new ArrayList<Place>();
 
         try{
 	        JSONArray jArray = new JSONArray(output);
 	        
 	        for (int i=0; i < jArray.length(); i++)
 	        {
-	            JSONObject place = jArray.getJSONObject(i);
-	            String country = place.getString("country");
-	        	countries.add(country);
+	            places.add(new Place(jArray.getJSONObject(i)));
 	        }
         }catch(Exception e){
         	Log.i ("info", "Error parsing json");
         }
         
-        Collections.sort(countries);
+        // Collections.sort(countries);
 
         activity.progressDialog.dismiss();
 
-        activity.populateCountriesList(countries.toArray(
-        	new String[countries.size()]
-        ));
+        activity.populatePlaces(
+        	places.toArray(new Place[places.size()])
+        );
+
+        //        countries.toArray(
+//        	new String[countries.size()]
+//        ));
         
         // TODO: check this.exception 
         // TODO: do something with the feed

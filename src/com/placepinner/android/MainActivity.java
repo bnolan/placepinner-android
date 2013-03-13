@@ -10,8 +10,13 @@ import android.app.ProgressDialog;
 import android.widget.AdapterView;
 import android.view.View;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.placepinner.android.RetrievePlaces;
+import com.placepinner.android.PlaceDetailActivity;
+import com.placepinner.android.Place;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 	public ProgressDialog progressDialog;
@@ -33,6 +38,7 @@ public class MainActivity extends Activity {
         	
         	@Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        		String placeId = "1234-4567";
         		
             	Log.i ("info", "Detected list click");
 
@@ -42,13 +48,21 @@ public class MainActivity extends Activity {
             	String str = (String) o;
             	
             	Toast.makeText(getBaseContext(), "Clicked " + str, Toast.LENGTH_SHORT).show();
+            	
+            	Intent i = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+            	i.putExtra("id", placeId);
+            	startActivity(i);            	
         	}
         });
     }
 
-    public void populateCountriesList(String[] values){
+    public void populatePlaces(Place[] places){
         ListView list= (ListView) findViewById(R.id.listView1);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        
+        // ArrayAdapter<Place> adapter = new ArrayAdapter<Place>(this, android.R.layout.simple_list_item_1, android.R.id.text1, places);
+        
+        PlaceListAdapter adapter = new PlaceListAdapter(this, places);
+        
         list.setAdapter(adapter); 
     }
 
