@@ -21,13 +21,18 @@ public class PlaceListAdapter extends ArrayAdapter<Place> {
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent){
+		Place place = places[position];
+		
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.place_list, parent, false);
 		
 		TextView textView = (TextView) rowView.findViewById(R.id.txtName);
-		// textView.setText("hello?");
-		textView.setText(places[position].getName());
+		textView.setText(place.getName());
 
+
+		textView = (TextView) rowView.findViewById(R.id.txtAddress);
+		textView.setText(place.getAddress());
+		
 		return rowView;
 	}
 }
