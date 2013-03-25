@@ -25,7 +25,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
+        MyApp app = (MyApp)getApplicationContext();
+        app.createDatabase();
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading places...");
         progressDialog.show();
@@ -38,21 +41,11 @@ public class MainActivity extends Activity {
         	
         	@Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        		String placeId = "1234-4567";
-        		
-            	Object o = list.getItemAtPosition(position);
-
-            	// As you are using Default String Adapter
-            	// String str = (String) o;
-            	
-            	Place place = (Place) o;
-            	
-            	// Toast.makeText(getBaseContext(), "Clicked " + place.getName(), Toast.LENGTH_SHORT).show();
-            	
-            	Log.i ("info", "Clicked id: " + place.getId());
-
+            	Place place  = (Place) list.getItemAtPosition(position);
+            	// Place place = (Place) o;
+            	// Log.i ("info", "Clicked id: " + place.getId());
             	Intent i = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-            	i.putExtra("id", place.getId());
+            	i.putExtra("uuid", place.getUuid());
             	startActivity(i);            	
         	}
         });

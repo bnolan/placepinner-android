@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.Toast;
 
 import android.net.Uri;
@@ -21,27 +22,28 @@ public class PlaceDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.place_detail);
         
-        String id = getIntent().getExtras().getString("id");
-
         MyApp app = (MyApp)getApplicationContext();
-
-    	final Place place = app.getPlace(id);
-        
-    	Log.i ("info", "Showing id #" + id);
+    	final Place place = app.getPlaceByUuid(getIntent().getExtras().getString("uuid"));
     	
     	if(place==null){
-        	Log.i ("info", "Couldnt find place #" + id);
+        	Log.i ("info", "Couldnt find place!");
         	return;
     	}
     	
-		TextView textName = (TextView) findViewById(R.id.textName);
-		textName.setText(place.getName());
+		TextView textfield = (TextView) findViewById(R.id.textName);
+		textfield.setText(place.getName());
 
-		TextView textAddress = (TextView) findViewById(R.id.textAddress);
-		textAddress.setText(place.getAddress());
+		textfield = (TextView) findViewById(R.id.textAddress);
+		textfield.setText(place.getAddress());
 
-		TextView textNotes = (TextView) findViewById(R.id.textNotes);
-		textNotes.setText(place.getNotes());
+		textfield = (TextView) findViewById(R.id.textCity);
+		textfield.setText("Locality: " + place.getLocality());
+
+		textfield = (TextView) findViewById(R.id.textCountry);
+		textfield.setText("Country: " + place.getCountry());
+
+		textfield = (TextView) findViewById(R.id.textNotes);
+		textfield.setText(place.getNotes());
 		
 		if(place.hasGeometry()){
 			String mapUrl = "http://api.tiles.mapbox.com/v3/examples.map-vyofok3q/pin-m-star+88c(" +
@@ -69,6 +71,18 @@ public class PlaceDetailActivity extends Activity {
 		}else{
         	Toast.makeText(getBaseContext(), "This place has no map location", Toast.LENGTH_SHORT).show();
 		}
+		
+		Button button = (Button) findViewById(R.id.buttonSave);
+
+		button.setOnClickListener(new View.OnClickListener() {
+        	@Override
+            public void onClick(View v) {
+            	Intent i = new Intent(getApplicationContext(), PlaceEditActivity.class);
+            	i.putExtra("uuid", place.getUuid());
+            	startActivity(i);            	
+        	}
+        });
+		
     }
 
     // Inflate the menu; this adds items to the action bar if it is present.

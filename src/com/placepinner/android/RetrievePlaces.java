@@ -9,12 +9,16 @@ import android.util.Log;
 import android.os.AsyncTask;
 import android.app.ProgressDialog;
 import org.json.*;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
+import java.util.Comparator;
 
 import com.placepinner.android.MainActivity;
 import com.placepinner.android.Place;
 import com.placepinner.android.MyApp;
+
+import android.location.Location;
+import android.location.LocationManager;
 
 public class RetrievePlaces extends AsyncTask<String, Void, String> {
     private Exception exception;
@@ -76,27 +80,44 @@ public class RetrievePlaces extends AsyncTask<String, Void, String> {
     	Log.i ("info", "HTTP Fetch complete");
         // Log.i ("info", output);
 
-    	ArrayList<Place> places = new ArrayList<Place>();
-
         try{
-	        JSONArray jArray = new JSONArray(output);
-	        
-	        for (int i=0; i < jArray.length(); i++)
-	        {
-	            places.add(new Place(jArray.getJSONObject(i)));
+        	JSONArray jArray = new JSONArray(output);
+
+        	for (int i=0; i < jArray.length(); i++){
+	        	Place place = new Place(jArray.getJSONObject(i));
+	        	place.save();
 	        }
-        }catch(Exception e){
+        }catch(JSONException e){
         	Log.i ("info", "Error parsing json");
+    		Log.d ("Exception!", e.toString() );
         }
         
-        // Collections.sort(countries);
-
         activity.progressDialog.dismiss();
 
         // Populate the places list
         MyApp app = (MyApp)activity.getApplicationContext();
-        app.resetPlaces(places);
+        // app.resetPlaces(places);
         
+    	List<Place> places = new Place().all();
+
+        final Location home = new Location(LocationManager.NETWORK_PROVIDER);
+        home.setLatitude(-41.22852);
+        home.setLongitude(174.88207);
+        
+        Collections.sort(places, new Comparator<Place>() {
+            public int compare(Place a, Place b) {
+                return Integer.signum(distance(a) - distance(b));
+            }
+            
+            private Integer distance(Place a){
+            	if(a.hasGeometry()){
+            		return Math.round(a.getLocation().distanceTo(home));
+            	}else{
+            		return 99999999;
+            	}
+            }
+        });
+
         activity.populatePlaces(
         	places.toArray(new Place[places.size()])
         );

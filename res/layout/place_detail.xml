@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-       android:layout_width="fill_parent"
-       android:layout_height="fill_parent"
-       xmlns:android="http://schemas.android.com/apk/res/android">
-       
+
        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+           xmlns:android="http://schemas.android.com/apk/res/android"
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent" >
             
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <TextView
@@ -32,6 +29,24 @@
         android:textColor="@android:color/darker_gray" />
 
     <TextView
+        android:id="@+id/textCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/textCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
         android:id="@+id/textNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,13 +57,19 @@
     <ImageButton
         android:id="@+id/imageButtonMap"
         android:layout_width="288dp"
-        android:layout_height="100dp"
+        android:layout_height="220dp"
         android:layout_margin="10dp"
-        android:layout_weight="0.68"
+        android:layout_weight="0.57"
         android:src="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Edit Place"
+        android:visibility="invisible" />
 
 </LinearLayout>
 
 </ScrollView>
-
-</LinearLayout>
